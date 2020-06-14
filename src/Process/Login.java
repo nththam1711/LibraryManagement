@@ -10,6 +10,7 @@ import Data.Connect;
 import Data.KhachHangData;
 import Object.Admin;
 import Object.KhachHang;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,8 +20,8 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
 
     KhachHangData khachhangdata = new KhachHangData();
-    AdminData admindata= new AdminData();
-    
+    AdminData admindata = new AdminData();
+
     public Login() {
         initComponents();
         this.lbConnect.setText(Connect.testConnect());
@@ -60,6 +61,7 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("Mật khẩu:");
 
         txtTaiKhoan.setEnabled(false);
+        txtTaiKhoan.setName("txtTaiKhoan"); // NOI18N
         txtTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTaiKhoanActionPerformed(evt);
@@ -67,10 +69,12 @@ public class Login extends javax.swing.JFrame {
         });
 
         txtMatKhau.setEnabled(false);
+        txtMatKhau.setName("txtMatKhau"); // NOI18N
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jRadioButton1.setText("Admin");
+        jRadioButton1.setName("rbAdmin"); // NOI18N
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
@@ -80,6 +84,7 @@ public class Login extends javax.swing.JFrame {
         buttonGroup1.add(rbKhachHang);
         rbKhachHang.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         rbKhachHang.setText("Khách hàng");
+        rbKhachHang.setName("rbKhachHang"); // NOI18N
         rbKhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbKhachHangActionPerformed(evt);
@@ -88,6 +93,7 @@ public class Login extends javax.swing.JFrame {
 
         btLogin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btLogin.setText("Đăng nhập");
+        btLogin.setName("btLogin"); // NOI18N
         btLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btLoginActionPerformed(evt);
@@ -96,6 +102,7 @@ public class Login extends javax.swing.JFrame {
 
         btExit.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btExit.setText("Thoát");
+        btExit.setName("btExit"); // NOI18N
         btExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btExitActionPerformed(evt);
@@ -190,30 +197,35 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         String taiKhoan = this.txtTaiKhoan.getText();
         String matKhau = this.txtMatKhau.getText();
-        if(taiKhoan.isEmpty() || matKhau.isEmpty()) {
+        if (taiKhoan.isEmpty() || matKhau.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Ban chua nhap day du thong tin", "thong bao", 1);
-        }
-        else {
-            KhachHang kh = khachhangdata.dangNhap(taiKhoan, matKhau);
-            Admin ad = admindata.dangNhap(taiKhoan, matKhau);
-            try{
-                if(kh!=null) {
-                    JKhachHang jkh = new JKhachHang();
-                    jkh.setVisible(true);
-                    dispose();
+        } else {
+            try {
+                if (Boolean.TRUE.equals(this.rbKhachHang.isSelected())) {
+                    KhachHang kh = khachhangdata.dangNhap(taiKhoan, matKhau);
+                    if (Objects.nonNull(kh)) {
+                        JKhachHang jkh = new JKhachHang();
+                        jkh.setVisible(true);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không tồn  tại tài khoản", "Thông báo", 1);
+                    }
+                } else if (Boolean.TRUE.equals(this.jRadioButton1.isSelected())) {
+                    Admin ad = admindata.dangNhap(taiKhoan, matKhau);
+                    if (Objects.nonNull(ad)) {
+                        System.out.println(ad.getMaAdmin());
+                        test t = new test();
+                        t.setVisible(true);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không tồn  tại tài khoản", "Thông báo", 1);
+                    }
                 }
-                else if(ad!=null) {
-                    test t = new test();
-                    t.setVisible(true);
-                    dispose();
-                }
-                else JOptionPane.showMessageDialog(null, "Không tồn  tại tài khoản", "Thông báo", 1);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
-        
+
     }//GEN-LAST:event_btLoginActionPerformed
 
     private void btExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExitActionPerformed

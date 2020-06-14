@@ -28,8 +28,8 @@ public class AdminData {
             rs = ps.executeQuery();
             while(rs.next()) {
                 ad = new Admin();
-               // kh.setMaKH(rs.getString("Ma_Khach_hang"));
-               // kh.setPass(rs.getString("Password"));
+                ad.setMaAdmin(rs.getString("Ma_Admin").trim());
+                ad.setPassword(rs.getString("Password"));
                 
             }
         }
